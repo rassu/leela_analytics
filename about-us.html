@@ -58,10 +58,10 @@
         }
         
         .fractal-divider {
-            position: relative;
             height: 150px;
-            margin: 50px 0;
-            overflow: hidden;
+            width: 100%;
+            position: relative;
+            margin: 60px 0;
         }
         
         /* World Map Visualization Styles */
@@ -99,7 +99,6 @@
         .map-overlay-info {
             padding: 25px;
             background-color: white;
-            width: 100%;
         }
         
         @media (min-width: 992px) {
@@ -108,6 +107,43 @@
                 height: 100%;
                 overflow-y: auto;
             }
+        }
+        
+        .map-overlay-info h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .map-legend {
+            margin-top: 25px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+        
+        .us-color {
+            background-color: #3b82f6;
+        }
+        
+        .india-color {
+            background-color: #10b981;
+        }
+        
+        .thailand-color {
+            background-color: #f59e0b;
         }
         
         .map-country-info h3 {
@@ -306,6 +342,28 @@
                 <p>Our diverse team of AI engineers and cybersecurity experts spans three countries, bringing together unique perspectives and specialized expertise to solve complex challenges.</p>
             </div>
             
+            <div class="global-map-container">
+                <div id="world-map"></div>
+                <div class="map-overlay-info">
+                    <h3>Our Global Presence</h3>
+                    <p>Leela Analytics operates across three strategic locations, enabling us to serve clients worldwide with 24/7 support and localized expertise.</p>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-color us-color"></span>
+                            <span>United States</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color india-color"></span>
+                            <span>India</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color thailand-color"></span>
+                            <span>Thailand</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="locations-grid">
                 <div class="location-card">
                     <div class="location-icon">
@@ -434,11 +492,10 @@
                     <div class="link-group">
                         <h3>Company</h3>
                         <ul>
-                            <li><a href="index.html#home">Home</a></li>
+                            <li><a href="index.html">Home</a></li>
                             <li><a href="index.html#services">Services</a></li>
                             <li><a href="about-us.html">About Us</a></li>
-                            <li><a href="blog.html">Insights & Articles</a></li>
-                            <li><a href="index.html#llm-tech">LLM Tech</a></li>
+                            <li><a href="blog.html">Blog</a></li>
                         </ul>
                     </div>
                     <div class="link-group">
@@ -463,9 +520,12 @@
         </div>
     </footer>
 
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <script src="about-fractal.js"></script>
+    <script src="global-map.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

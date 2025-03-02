@@ -1,3 +1,101 @@
+/* Loading Animation Styles */
+body {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+body.content-visible {
+    opacity: 1;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out;
+}
+
+.loading-overlay.fade-out {
+    opacity: 0;
+}
+
+.loading-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.loading-logo {
+    width: 80px;
+    height: 80px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: pulse 1.5s infinite ease-in-out alternate;
+}
+
+.loading-logo span {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+}
+
+.loading-text h2 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-color);
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.loading-text p {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.loading-progress-container {
+    width: 250px;
+    height: 4px;
+    background-color: rgba(99, 102, 241, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.loading-progress-bar {
+    height: 100%;
+    width: 0;
+    background-color: var(--primary-color);
+    transition: width 0.2s ease;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+    }
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+    }
+}
+
 /* Base Styles */
 :root {
     --primary-color: #6366f1;
@@ -1152,8 +1250,8 @@ footer::before {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
     background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
     pointer-events: none;
 }
@@ -2529,7 +2627,7 @@ footer::before {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    animation: pulse 2s ease-in-out infinite;
+    animation: pulse 2s infinite ease-in-out alternate;
 }
 
 .brain-pulse {
@@ -2541,7 +2639,7 @@ footer::before {
     height: 50px;
     border-radius: 50%;
     background: rgba(16, 185, 129, 0.2);
-    animation: brain-pulse 2s ease-in-out infinite;
+    animation: brain-pulse 2s infinite ease-in-out alternate;
 }
 
 .neural-connection {
@@ -2570,113 +2668,6 @@ footer::before {
     left: 60%;
     transform: rotate(-45deg);
     animation: neural-flash 3s infinite 1.4s;
-}
-
-/* Claude Card Styles and Animations */
-.llm-card.claude {
-    border-top: 4px solid #8b5cf6;
-    background: linear-gradient(180deg, rgba(139, 92, 246, 0.2) 0%, rgba(15, 23, 42, 0.7) 100%);
-}
-
-.claude-animation {
-    position: relative;
-    width: 100px;
-    height: 100px;
-}
-
-.claude-animation i {
-    font-size: 3rem;
-    color: #8b5cf6;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: float 3s ease-in-out infinite alternate;
-}
-
-.instruction-line {
-    position: absolute;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
-    opacity: 0.5;
-    width: 60px;
-    right: 10px;
-}
-
-.instruction-line:nth-child(2) {
-    top: 40%;
-    animation: instruction-slide 3s infinite 0.2s;
-}
-
-.instruction-line:nth-child(3) {
-    top: 50%;
-    animation: instruction-slide 3s infinite 0.7s;
-}
-
-.instruction-line:nth-child(4) {
-    top: 60%;
-    animation: instruction-slide 3s infinite 1.2s;
-}
-
-.instruction-dot {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: #8b5cf6;
-    border-radius: 50%;
-    top: 50%;
-    right: 20px;
-    opacity: 0;
-    animation: dot-pulse 3s infinite 1.5s;
-}
-
-/* Gemini Card Styles and Animations */
-.llm-card.gemini {
-    border-top: 4px solid #ec4899;
-    background: linear-gradient(180deg, rgba(236, 72, 153, 0.2) 0%, rgba(15, 23, 42, 0.7) 100%);
-}
-
-.gemini-animation {
-    position: relative;
-    width: 100px;
-    height: 100px;
-}
-
-.gemini-animation i {
-    font-size: 3rem;
-    color: #ec4899;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: gem-rotate 4s ease-in-out infinite;
-}
-
-.gem-sparkle {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: #ec4899;
-    border-radius: 50%;
-    opacity: 0;
-}
-
-.gem-sparkle:nth-child(2) {
-    top: 30%;
-    left: 60%;
-    animation: sparkle 3s infinite 0.2s;
-}
-
-.gem-sparkle:nth-child(3) {
-    top: 40%;
-    left: 70%;
-    animation: sparkle 3s infinite 0.8s;
-}
-
-.gem-sparkle:nth-child(4) {
-    top: 50%;
-    left: 65%;
-    animation: sparkle 3s infinite 1.4s;
 }
 
 .founder-bio {

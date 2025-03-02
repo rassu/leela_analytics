@@ -34,6 +34,20 @@ body.content-visible {
     gap: 20px;
 }
 
+.svg-animation-container {
+    width: 400px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.svg-animation-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
 .loading-logo {
     width: 80px;
     height: 80px;
@@ -1754,7 +1768,6 @@ footer::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
     margin-top: 2rem;
     position: relative;
 }

@@ -8,15 +8,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingContent = document.createElement('div');
     loadingContent.className = 'loading-content';
     
-    // Create logo element
-    const logoElement = document.createElement('div');
-    logoElement.className = 'loading-logo';
-    logoElement.innerHTML = '<span>L</span>';
+    // Create SVG animation container
+    const svgContainer = document.createElement('div');
+    svgContainer.className = 'svg-animation-container';
     
-    // Create loading text
-    const loadingText = document.createElement('div');
-    loadingText.className = 'loading-text';
-    loadingText.innerHTML = '<h2>Leela Analytics</h2><p>Customizing LLMs for Vertical AI Solutions</p>';
+    // Load the SVG animation
+    fetch('leela-animation.svg')
+        .then(response => response.text())
+        .then(svgContent => {
+            svgContainer.innerHTML = svgContent;
+            
+            // Add animation complete event listener
+            setTimeout(() => {
+                // Animation is complete, proceed with page load
+                startProgressBar();
+            }, 2000); // Wait for SVG animation to complete
+        })
+        .catch(error => {
+            console.error('Error loading SVG animation:', error);
+            // Fallback to simple logo if SVG fails to load
+            createFallbackLogo();
+            startProgressBar();
+        });
     
     // Create loading progress bar
     const progressContainer = document.createElement('div');
@@ -27,16 +40,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Assemble the loading elements
     progressContainer.appendChild(progressBar);
-    loadingContent.appendChild(logoElement);
-    loadingContent.appendChild(loadingText);
+    loadingContent.appendChild(svgContainer);
     loadingContent.appendChild(progressContainer);
     loadingOverlay.appendChild(loadingContent);
     
     // Add to body as the first child
     document.body.insertBefore(loadingOverlay, document.body.firstChild);
     
+    // Fallback logo creation function
+    function createFallbackLogo() {
+        const logoElement = document.createElement('div');
+        logoElement.className = 'loading-logo';
+        logoElement.innerHTML = '<span>L</span>';
+        
+        const loadingText = document.createElement('div');
+        loadingText.className = 'loading-text';
+        loadingText.innerHTML = '<h2>Leela Analytics</h2><p>Customizing LLMs for Vertical AI Solutions</p>';
+        
+        svgContainer.appendChild(logoElement);
+        svgContainer.appendChild(loadingText);
+    }
+    
     // Function to animate the progress bar
-    function animateProgress() {
+    function startProgressBar() {
         let width = 0;
         const interval = setInterval(function() {
             if (width >= 100) {
@@ -61,10 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     }
     
-    // Start animating after a short delay
-    setTimeout(animateProgress, 300);
-    
-    // If the page takes too long to load, force remove the overlay after 5 seconds
+    // If the page takes too long to load, force remove the overlay after 8 seconds
     setTimeout(function() {
         if (document.body.contains(loadingOverlay)) {
             loadingOverlay.classList.add('fade-out');
@@ -75,5 +98,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.classList.add('content-visible');
             }, 500);
         }
-    }, 5000);
+    }, 8000);
 });

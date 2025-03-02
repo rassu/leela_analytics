@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <style>
+    @keyframes dash {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes fillIn {
+      from {
+        fill-opacity: 0;
+      }
+      to {
+        fill-opacity: 1;
+      }
+    }
+    @keyframes pulse {
+      0% {
+        filter: drop-shadow(0 0 2px rgba(99, 102, 241, 0.7));
+      }
+      50% {
+        filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.9));
+      }
+      100% {
+        filter: drop-shadow(0 0 2px rgba(99, 102, 241, 0.7));
+      }
+    }
+    .letter {
+      stroke: #6366f1;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: #6366f1;
+      fill-opacity: 0;
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+    }
+    #L1 {
+      animation: dash 0.8s ease forwards, fillIn 0.5s ease 0.8s forwards, pulse 2s ease-in-out 1.3s infinite;
+    }
+    #E1 {
+      animation: dash 0.8s ease 0.2s forwards, fillIn 0.5s ease 1.0s forwards, pulse 2s ease-in-out 1.3s infinite;
+    }
+    #E2 {
+      animation: dash 0.8s ease 0.4s forwards, fillIn 0.5s ease 1.2s forwards, pulse 2s ease-in-out 1.3s infinite;
+    }
+    #L2 {
+      animation: dash 0.8s ease 0.6s forwards, fillIn 0.5s ease 1.4s forwards, pulse 2s ease-in-out 1.3s infinite;
+    }
+    #A {
+      animation: dash 0.8s ease 0.8s forwards, fillIn 0.5s ease 1.6s forwards, pulse 2s ease-in-out 1.3s infinite;
+    }
+    .analytics {
+      font-family: 'Arial', sans-serif;
+      font-size: 24px;
+      fill: #6b7280;
+      opacity: 0;
+      animation: fillIn 0.5s ease 1.8s forwards;
+    }
+  </style>
+  
+  <!-- L -->
+  <path id="L1" class="letter" d="M40,30 L40,90 L70,90" />
+  
+  <!-- E -->
+  <path id="E1" class="letter" d="M90,30 L90,90 L130,90 M90,60 L120,60 M90,30 L130,30" />
+  
+  <!-- E -->
+  <path id="E2" class="letter" d="M150,30 L150,90 L190,90 M150,60 L180,60 M150,30 L190,30" />
+  
+  <!-- L -->
+  <path id="L2" class="letter" d="M210,30 L210,90 L240,90" />
+  
+  <!-- A -->
+  <path id="A" class="letter" d="M260,90 L280,30 L300,90 M270,70 L290,70" />
+  
+  <!-- Analytics -->
+  <text x="200" y="115" text-anchor="middle" class="analytics">ANALYTICS</text>
+</svg>

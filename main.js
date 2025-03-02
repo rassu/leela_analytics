@@ -57,53 +57,6 @@ function initThreeJS() {
     
     // Start animation loop
     animate();
-    
-    // Camera position logging
-    controls.addEventListener('change', function() {
-        // Create or update camera info display
-        let cameraInfo = document.getElementById('camera-info');
-        if (!cameraInfo) {
-            cameraInfo = document.createElement('div');
-            cameraInfo.id = 'camera-info';
-            cameraInfo.style.position = 'fixed';
-            cameraInfo.style.bottom = '10px';
-            cameraInfo.style.left = '10px';
-            cameraInfo.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-            cameraInfo.style.color = 'white';
-            cameraInfo.style.padding = '10px';
-            cameraInfo.style.fontFamily = 'monospace';
-            cameraInfo.style.fontSize = '12px';
-            cameraInfo.style.zIndex = '1000';
-            cameraInfo.style.borderRadius = '5px';
-            document.body.appendChild(cameraInfo);
-        }
-        
-        // Update camera info text
-        cameraInfo.innerHTML = `
-            Camera Position: <br>
-            Position: {x: ${camera.position.x.toFixed(2)}, y: ${camera.position.y.toFixed(2)}, z: ${camera.position.z.toFixed(2)}} <br>
-            LookAt Target: {x: ${controls.target.x.toFixed(2)}, y: ${controls.target.y.toFixed(2)}, z: ${controls.target.z.toFixed(2)}} <br>
-            Rotation: {x: ${camera.rotation.x.toFixed(2)}, y: ${camera.rotation.y.toFixed(2)}, z: ${camera.rotation.z.toFixed(2)}}
-        `;
-        
-        // Log to console as well
-        console.log('Camera Position: ');
-        console.log('Position: ' + JSON.stringify({
-            x: camera.position.x.toFixed(2),
-            y: camera.position.y.toFixed(2),
-            z: camera.position.z.toFixed(2)
-        }));
-        console.log('LookAt Target: ' + JSON.stringify({
-            x: controls.target.x.toFixed(2),
-            y: controls.target.y.toFixed(2),
-            z: controls.target.z.toFixed(2)
-        }));
-        console.log('Rotation: ' + JSON.stringify({
-            x: camera.rotation.x.toFixed(2),
-            y: camera.rotation.y.toFixed(2),
-            z: camera.rotation.z.toFixed(2)
-        }));
-    });
 }
 
 function createParticles() {

@@ -242,14 +242,6 @@ function createFractalBackground() {
     controls.maxDistance = 2;
     controls.maxPolarAngle = Math.PI / 2;
     
-    // Add camera position logging
-    controls.addEventListener('change', function() {
-        console.log('Camera Position: ');
-        console.log('Position: {x: ' + camera.position.x.toFixed(2) + ', y: ' + camera.position.y.toFixed(2) + ', z: ' + camera.position.z.toFixed(2) + '}');
-        console.log('LookAt Target: {x: ' + controls.target.x.toFixed(2) + ', y: ' + controls.target.y.toFixed(2) + ', z: ' + controls.target.z.toFixed(2) + '}');
-        console.log('Rotation: {x: ' + camera.rotation.x.toFixed(2) + ', y: ' + camera.rotation.y.toFixed(2) + ', z: ' + camera.rotation.z.toFixed(2) + '}');
-    });
-    
     // Create a plane for the fractal
     const geometry = new THREE.PlaneGeometry(2, 2);
     
@@ -406,20 +398,6 @@ function animate() {
     
     // Render the scene
     renderer.render(scene, camera);
-}
-
-// Log camera position (as required by the MEMORY)
-function logCameraPosition() {
-    console.log("Camera Position:");
-    console.log("Position: {x: " + camera.position.x.toFixed(2) + 
-                ", y: " + camera.position.y.toFixed(2) + 
-                ", z: " + camera.position.z.toFixed(2) + "}");
-    console.log("LookAt Target: {x: " + controls.target.x.toFixed(2) + 
-                ", y: " + controls.target.y.toFixed(2) + 
-                ", z: " + controls.target.z.toFixed(2) + "}");
-    console.log("Rotation: {x: " + camera.rotation.x.toFixed(2) + 
-                ", y: " + camera.rotation.y.toFixed(2) + 
-                ", z: " + camera.rotation.z.toFixed(2) + "}");
 }
 
 // Detect device performance capabilities

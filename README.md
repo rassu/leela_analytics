@@ -8,7 +8,6 @@ A modern, responsive website for Leela Analytics, showcasing their expertise in 
 - Interactive 3D visualization using Three.js
 - Modern UI with smooth animations
 - Contact form
-- Camera position logging for 3D scene
 
 ## Technologies Used
 
@@ -31,15 +30,6 @@ A modern, responsive website for Leela Analytics, showcasing their expertise in 
 1. Clone or download this repository
 2. Open `index.html` in a web browser
 3. No build process or dependencies required - everything is included via CDN
-
-## Camera Position Logging
-
-The website includes a camera position logging feature that displays the current:
-- Camera Position (x, y, z)
-- LookAt Target (x, y, z)
-- Rotation (x, y, z)
-
-This information is updated in real-time as you interact with the 3D visualization.
 
 ## Browser Compatibility
 

@@ -40,9 +40,6 @@ function initThreeJS() {
     controls.dampingFactor = 0.05;
     controls.rotateSpeed = 0.5;
     
-    // Add camera position logging to OrbitControls change event
-    controls.addEventListener('change', updateCameraInfo);
-    
     // Create particles
     createParticles();
     
@@ -57,9 +54,6 @@ function initThreeJS() {
     
     // Handle window resize
     window.addEventListener('resize', onWindowResize);
-    
-    // Initial camera info update
-    updateCameraInfo();
     
     // Start animation loop
     animate();
@@ -178,21 +172,6 @@ function onWindowResize() {
     
     // Update renderer size
     renderer.setSize(document.querySelector('#canvas-container').offsetWidth, document.querySelector('#canvas-container').offsetHeight);
-}
-
-function updateCameraInfo() {
-    // Get camera position, target, and rotation
-    const position = camera.position.clone();
-    const target = controls.target.clone();
-    const rotation = new THREE.Euler().setFromQuaternion(camera.quaternion);
-    
-    // Format the values
-    const positionStr = `Position: {x: ${position.x.toFixed(2)}, y: ${position.y.toFixed(2)}, z: ${position.z.toFixed(2)}}`;
-    const targetStr = `LookAt Target: {x: ${target.x.toFixed(2)}, y: ${target.y.toFixed(2)}, z: ${target.z.toFixed(2)}}`;
-    const rotationStr = `Rotation: {x: ${rotation.x.toFixed(2)}, y: ${rotation.y.toFixed(2)}, z: ${rotation.z.toFixed(2)}}`;
-    
-    // Update the camera info display
-    document.getElementById('camera-position').innerHTML = `Camera Position:<br>${positionStr}<br>${targetStr}<br>${rotationStr}`;
 }
 
 // Initialize Three.js scene when the page is loaded

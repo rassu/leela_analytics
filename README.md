@@ -1,6 +1,6 @@
 # Leela Analytics Website
 
-A modern, responsive website for Leela Analytics, showcasing their expertise in customizing LLMs for vertical AI solutions.
+A modern, responsive website for Leela Analytics, showcasing their expertise in cybersecurity and AI solutions.
 
 ## Features
 
@@ -24,12 +24,20 @@ A modern, responsive website for Leela Analytics, showcasing their expertise in 
 - `styles.css` - CSS styles
 - `main.js` - JavaScript functionality and Three.js implementation
 - `README.md` - Project documentation
+- `HOSTING.md` - Hosting options and instructions
+- `netlify.toml` - Netlify configuration for deployment
+- `robots.txt` - Search engine crawling instructions
+- `sitemap.xml` - Site structure for search engines
 
 ## Setup and Usage
 
 1. Clone or download this repository
 2. Open `index.html` in a web browser
 3. No build process or dependencies required - everything is included via CDN
+
+## Deployment
+
+See `HOSTING.md` for detailed hosting options and instructions.
 
 ## Browser Compatibility
 

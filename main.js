@@ -20,6 +20,8 @@ let scene, camera, renderer, controls;
 let particles, particleSystem;
 const particleCount = 1000;
 
+// Commenting out the original Three.js initialization to use our new particle network animation instead
+/*
 function initThreeJS() {
     // Create scene
     scene = new THREE.Scene();
@@ -27,37 +29,67 @@ function initThreeJS() {
     // Create camera
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 30;
-    
+
     // Create renderer
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(document.querySelector('#canvas-container').offsetWidth, document.querySelector('#canvas-container').offsetHeight);
+    // Set appropriate width for the container
+    const containerWidth = document.querySelector('#canvas-container').offsetWidth;
+    const containerHeight = document.querySelector('#canvas-container').offsetHeight;
+    renderer.setSize(containerWidth, containerHeight);
     renderer.setClearColor(0x000000, 0);
-    document.querySelector('#canvas-container').appendChild(renderer.domElement);
     
-    // Add OrbitControls
+    // Center the canvas in the container
+    const canvas = renderer.domElement;
+    canvas.style.position = 'absolute';
+    canvas.style.left = '50%';
+    canvas.style.top = '50%';
+    canvas.style.transform = 'translate(-50%, -50%)';
+    
+    document.querySelector('#canvas-container').appendChild(renderer.domElement);
+
+    // Add OrbitControls with restricted zoom
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.rotateSpeed = 0.5;
+    // Disable zoom functionality
+    controls.enableZoom = false;
+    // Limit rotation to prevent disorientation
+    controls.minPolarAngle = Math.PI / 3;
+    controls.maxPolarAngle = Math.PI / 1.5;
     
     // Create particles
     createParticles();
     
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
+    // Create network lines
+    createNetworkLines();
     
-    // Add directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(10, 10, 10);
-    scene.add(directionalLight);
-    
-    // Handle window resize
+    // Add window resize handler
     window.addEventListener('resize', onWindowResize);
     
     // Start animation loop
     animate();
 }
+*/
+
+// Comment out the function calls as well
+/*
+function createParticles() {
+    // ... existing code ...
+}
+
+function createNetworkLines() {
+    // ... existing code ...
+}
+
+function animate() {
+    // ... existing code ...
+}
+
+function onWindowResize() {
+    // ... existing code ...
+}
+*/
 
 function createParticles() {
     // Create particle geometry
@@ -75,10 +107,10 @@ function createParticles() {
     
     // Set random positions and colors for particles
     for (let i = 0; i < particleCount; i++) {
-        // Position
-        const x = (Math.random() - 0.5) * 50;
-        const y = (Math.random() - 0.5) * 50;
-        const z = (Math.random() - 0.5) * 50;
+        // Position - expanded horizontally (wider x range)
+        const x = (Math.random() - 0.5) * 80; // Increased from 50 to 80 for horizontal expansion
+        const y = (Math.random() - 0.5) * 40;
+        const z = (Math.random() - 0.5) * 40;
         
         positions[i * 3] = x;
         positions[i * 3 + 1] = y;
@@ -107,7 +139,7 @@ function createNetworkLines() {
     // Create lines connecting some particles
     const lineGeometry = new THREE.BufferGeometry();
     const linePositions = [];
-    const lineCount = 200; // Number of lines
+    const lineCount = 250; // Increased number of lines for wider visualization
     
     for (let i = 0; i < lineCount; i++) {
         // Select two random particles
@@ -123,14 +155,14 @@ function createNetworkLines() {
         const y2 = particleSystem.geometry.attributes.position.array[particleIndex2 * 3 + 1];
         const z2 = particleSystem.geometry.attributes.position.array[particleIndex2 * 3 + 2];
         
-        // Only connect if they're close enough
+        // Only connect if they're close enough - increased distance threshold for wider layout
         const distance = Math.sqrt(
             Math.pow(x2 - x1, 2) + 
             Math.pow(y2 - y1, 2) + 
             Math.pow(z2 - z1, 2)
         );
         
-        if (distance < 15) {
+        if (distance < 20) { // Increased from 15 to 20
             linePositions.push(x1, y1, z1);
             linePositions.push(x2, y2, z2);
         }
@@ -164,11 +196,20 @@ function animate() {
 
 function onWindowResize() {
     // Update camera aspect ratio
-    camera.aspect = document.querySelector('#canvas-container').offsetWidth / document.querySelector('#canvas-container').offsetHeight;
+    const containerWidth = document.querySelector('#canvas-container').offsetWidth;
+    const containerHeight = document.querySelector('#canvas-container').offsetHeight;
+    camera.aspect = containerWidth / containerHeight;
     camera.updateProjectionMatrix();
     
     // Update renderer size
-    renderer.setSize(document.querySelector('#canvas-container').offsetWidth, document.querySelector('#canvas-container').offsetHeight);
+    renderer.setSize(containerWidth, containerHeight);
+    
+    // Ensure canvas remains centered
+    const canvas = renderer.domElement;
+    canvas.style.position = 'absolute';
+    canvas.style.left = '50%';
+    canvas.style.top = '50%';
+    canvas.style.transform = 'translate(-50%, -50%)';
 }
 
 // LLM Ticker Animation
@@ -610,39 +651,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Sales Form Handling
-document.addEventListener('DOMContentLoaded', function() {
-    const salesForm = document.getElementById('salesForm');
-    
-    if (salesForm) {
-        salesForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const company = document.getElementById('company').value;
-            const message = document.getElementById('message').value;
-            
-            // Here you would typically send this data to a server endpoint
-            // For now, we'll simulate a successful submission
-            
-            // Create a mailto link with the form data
-            const subject = `Sales Inquiry from ${name} at ${company}`;
-            const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\n\nMessage:\n${message}`;
-            const mailtoLink = `mailto:babu@leelaanalytics.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            
-            // Open the email client
-            window.location.href = mailtoLink;
-            
-            // Reset the form
-            salesForm.reset();
-            
-            // Show a success message
-            alert('Thank you for your inquiry! Your email client should open shortly.');
-        });
-    }
-});
-
 // Form submission handling
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.querySelector('.contact-form form');
@@ -708,8 +716,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize Three.js if canvas container exists
     if (document.querySelector('#canvas-container')) {
-        initThreeJS();
-        createNetworkLines();
+        // Commenting out the original Three.js initialization to use our new particle network animation instead
+        // initThreeJS();
+        // createNetworkLines();
     }
     
     // Setup LLM ticker

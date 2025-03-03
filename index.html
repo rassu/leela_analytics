@@ -21,6 +21,85 @@
     
     <!-- Loading Animation Script -->
     <script src="loading-animation-wow.js"></script>
+    <script src="header-logo.js"></script>
+    <script src="gradient-animation.js"></script>
+    <script src="3d-particles.js"></script>
+    
+    <style>
+        /* Custom styles to fix positioning */
+        .hero {
+            height: calc(100vh - 60px);
+            max-height: 600px;
+            min-height: 400px;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .hero .container {
+            padding: 0;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Override the inline styles */
+        .hero-content {
+            padding: 0 20px;
+            margin: 0 auto;
+            max-width: 650px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .btn.primary {
+            background-color: #6366f1;
+            color: white;
+            border: 2px solid #6366f1;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn.secondary {
+            background-color: white;
+            color: #6366f1;
+            border: 2px solid #6366f1;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero-visual {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -46,6 +125,8 @@
     </header>
 
     <section id="home" class="hero">
+        <div class="hero-overlay"></div>
+        <div id="canvas-container"></div>
         <div class="container">
             <div class="hero-content">
                 <h1>The Experts in Customizing LLMs for Vertical AI Solutions</h1>
@@ -54,9 +135,6 @@
                     <a href="#services" class="btn primary">Our Services</a>
                     <a href="https://www.linkedin.com/company/leela-analytics" target="_blank" class="btn secondary">Get in Touch</a>
                 </div>
-            </div>
-            <div class="hero-visual">
-                <div id="canvas-container"></div>
             </div>
         </div>
     </section>

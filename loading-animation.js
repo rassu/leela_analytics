@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const svgContainer = document.createElement('div');
     svgContainer.className = 'svg-animation-container';
     
-    // Load the SVG animation
-    fetch('leela-animation.svg')
+    // Load the SVG animation - use absolute path that works with both www and non-www
+    fetch('/leela-animation.svg')
         .then(response => response.text())
         .then(svgContent => {
             svgContainer.innerHTML = svgContent;
@@ -87,16 +87,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     }
     
-    // If the page takes too long to load, force remove the overlay after 8 seconds
+    // If the page takes too long to load, force remove the overlay after 12 seconds
     setTimeout(function() {
         if (document.body.contains(loadingOverlay)) {
             loadingOverlay.classList.add('fade-out');
             setTimeout(function() {
-                if (loadingOverlay.parentNode) {
-                    loadingOverlay.parentNode.removeChild(loadingOverlay);
+                if (document.body.contains(loadingOverlay)) {
+                    document.body.removeChild(loadingOverlay);
                 }
-                document.body.classList.add('content-visible');
             }, 500);
         }
-    }, 8000);
+    }, 12000); // Increased from 8000 to 12000 ms (12 seconds)
 });

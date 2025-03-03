@@ -12,24 +12,57 @@ document.addEventListener('DOMContentLoaded', function() {
     const svgContainer = document.createElement('div');
     svgContainer.className = 'svg-animation-container';
     
-    // Load the SVG animation - use absolute path that works with both www and non-www
-    fetch('/leela-animation.svg')
-        .then(response => response.text())
-        .then(svgContent => {
-            svgContainer.innerHTML = svgContent;
-            
-            // Add animation complete event listener
-            setTimeout(() => {
-                // Animation is complete, proceed with page load
-                startProgressBar();
-            }, 2000); // Wait for SVG animation to complete
-        })
-        .catch(error => {
-            console.error('Error loading SVG animation:', error);
-            // Fallback to simple logo if SVG fails to load
+    // Determine the correct base URL
+    const baseUrl = window.location.hostname.includes('www.') ? 
+        'https://www.leelaanalytics.com' : 
+        window.location.origin;
+    
+    // Try multiple paths for the SVG to handle redirects and different domain formats
+    const svgPaths = [
+        '/leela-animation.svg',
+        'leela-animation.svg',
+        `${baseUrl}/leela-animation.svg`,
+        'https://www.leelaanalytics.com/leela-animation.svg',
+        'https://leelaanalytics.com/leela-animation.svg'
+    ];
+    
+    // Function to try loading SVG from different paths
+    function tryLoadSvg(pathIndex) {
+        if (pathIndex >= svgPaths.length) {
+            console.error('Failed to load SVG from all paths');
             createFallbackLogo();
             startProgressBar();
-        });
+            return;
+        }
+        
+        console.log('Trying to load SVG from:', svgPaths[pathIndex]);
+        
+        fetch(svgPaths[pathIndex])
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(svgContent => {
+                console.log('SVG loaded successfully from:', svgPaths[pathIndex]);
+                svgContainer.innerHTML = svgContent;
+                
+                // Add animation complete event listener
+                setTimeout(() => {
+                    // Animation is complete, proceed with page load
+                    startProgressBar();
+                }, 2000); // Wait for SVG animation to complete
+            })
+            .catch(error => {
+                console.error('Error loading SVG from ' + svgPaths[pathIndex] + ':', error);
+                // Try the next path
+                tryLoadSvg(pathIndex + 1);
+            });
+    }
+    
+    // Start trying to load the SVG
+    tryLoadSvg(0);
     
     // Create loading progress bar
     const progressContainer = document.createElement('div');
@@ -87,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     }
     
-    // If the page takes too long to load, force remove the overlay after 12 seconds
+    // If the page takes too long to load, force remove the overlay after 15 seconds
     setTimeout(function() {
         if (document.body.contains(loadingOverlay)) {
             loadingOverlay.classList.add('fade-out');
@@ -97,5 +130,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }, 500);
         }
-    }, 12000); // Increased from 8000 to 12000 ms (12 seconds)
+    }, 15000); // Increased to 15 seconds
 });

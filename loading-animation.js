@@ -2,6 +2,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Loading animation script initialized');
     
+    // Set body to visible immediately to prevent white screen
+    document.body.style.opacity = "1";
+    
     // Create the loading overlay
     const loadingOverlay = document.createElement('div');
     loadingOverlay.className = 'loading-overlay';
@@ -109,6 +112,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (document.body.contains(loadingOverlay)) {
                         document.body.removeChild(loadingOverlay);
                     }
+                    // Add content-visible class to body to show the main content
+                    document.body.classList.add('content-visible');
+                    
+                    // Trigger a window resize event to ensure Three.js initializes properly
+                    const resizeEvent = new Event('resize');
+                    window.dispatchEvent(resizeEvent);
                 }, 500);
             } else {
                 width += increment;
@@ -125,6 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (document.body.contains(loadingOverlay)) {
                     document.body.removeChild(loadingOverlay);
                 }
+                // Add content-visible class to body to show the main content
+                document.body.classList.add('content-visible');
+                
+                // Trigger a window resize event to ensure Three.js initializes properly
+                const resizeEvent = new Event('resize');
+                window.dispatchEvent(resizeEvent);
             }, 500);
         }
     }, 15000); // 15 seconds

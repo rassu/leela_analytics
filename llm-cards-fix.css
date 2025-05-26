@@ -1,0 +1,140 @@
+/* LLM Cards Visual Consistency Fix */
+
+/* Base card styling - consistent across all cards */
+.llm-card {
+    flex: 0 0 auto;
+    width: 300px;
+    background: rgba(15, 23, 42, 0.85) !important; /* Darker, more consistent background */
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    height: 100%;
+    border-top: 4px solid #6366f1 !important; /* Consistent primary color border */
+}
+
+/* Consistent hover effect */
+.llm-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Consistent card content padding and layout */
+.llm-card-content {
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+/* Consistent heading style */
+.llm-card h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 1.5rem 0 1rem;
+    color: #fff;
+    text-align: center;
+}
+
+/* Consistent stats display */
+.llm-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 1.5rem 0;
+    width: 100%;
+}
+
+.llm-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #6366f1; /* Consistent primary color */
+    margin-bottom: 0.3rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Consistent description style */
+.llm-description {
+    font-size: 1rem;
+    color: #cbd5e1;
+    text-align: center;
+    margin-top: auto;
+    line-height: 1.5;
+}
+
+/* Consistent animation container */
+.llm-animation-container {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Consistent icon styling */
+.llm-animation-container i {
+    font-size: 3rem;
+    color: #6366f1; /* Consistent primary color */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 2s infinite ease-in-out alternate;
+}
+
+/* Consistent pulse animation for all icons */
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.9);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+}
+
+/* Consistent glow effect */
+.llm-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.llm-card:hover::after {
+    opacity: 1;
+}
+
+/* ComfyUI specific styles - to be added */
+.llm-card.comfyui {
+    border-top: 4px solid #6366f1 !important;
+}
+
+.comfyui-animation i {
+    color: #6366f1;
+}

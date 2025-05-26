@@ -18,7 +18,7 @@ git add .
 git commit -m "Initial commit"
 
 # Create repository on GitHub first, then:
-git remote add origin https://github.com/yourusername/leela-analytics.git
+git remote add origin https://github.com/rassu/leela-analytics.git
 git branch -M main
 git push -u origin main
 ```

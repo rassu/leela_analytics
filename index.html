@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leela Analytics - Customizing LLMs for Vertical AI Solutions</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/geist-mono" rel="stylesheet">
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-L6ZD1K2BQL"></script>
@@ -21,549 +20,461 @@
         gtag('config', 'G-L6ZD1K2BQL');
     </script>
     
-    <!-- Loading Animation Script -->
-    <script src="loading-animation-wow.js"></script>
-    <script src="header-logo.js"></script>
-    <script src="gradient-animation.js"></script>
-    <script src="3d-particles.js"></script>
-    
     <style>
-        /* Custom styles to fix positioning */
-        .hero {
-            height: calc(100vh - 60px);
-            max-height: 600px;
-            min-height: 400px;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            position: relative;
+        .font-geist-mono { font-family: 'Geist Mono', monospace; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .spline-bg {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -2;
+        }
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 100%);
+          z-index: -1;
+        }
+        .fade-in {
+          opacity: 0;
+          animation: fadeIn 0.8s ease-in-out forwards;
+        }
+        .fade-in-slide-up {
+          opacity: 0;
+          transform: translateY(20px);
+          animation: fadeInUp 0.8s ease-in-out forwards;
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-500 { animation-delay: 500ms; }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+          from { 
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        /* LLM cards styling */
+        .llm-cards-container {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 1.5rem;
+          width: 100%;
         }
         
-        .hero .container {
-            padding: 0;
-            margin: 0 auto;
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 10;
+        .llm-card {
+          backdrop-filter: blur(12px);
+          background-color: rgba(0,0,0,0.3);
+          border: 1px solid rgba(107, 114, 128, 0.5);
+          border-radius: 0.75rem;
+          padding: 1.5rem;
+          transition: all 0.3s ease;
         }
         
-        /* Override the inline styles */
-        .hero-content {
-            padding: 0 20px;
-            margin: 0 auto;
-            max-width: 650px;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-        
-        .btn.primary {
-            background-color: #6366f1;
-            color: white;
-            border: 2px solid #6366f1;
-            font-weight: 600;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn.secondary {
-            background-color: white;
-            color: #6366f1;
-            border: 2px solid #6366f1;
-            font-weight: 600;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .hero-visual {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-        
-        #canvas-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .llm-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+          border-color: rgba(59, 130, 246, 0.4);
         }
     </style>
 </head>
-<body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <a href="index.html">
-                    <img src="images/leela-logo.png" alt="Leela Analytics Logo" class="logo-image">
+<body class="bg-black text-white font-inter font-light min-h-screen">
+    <!-- Background -->
+    <div class="spline-bg">
+        <iframe src='https://my.spline.design/distortedspiralcopy-E3eftImqwWVDCs3VOeOacDLp/' frameborder='0' width='100%' height='100%'></iframe>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="container mx-auto px-4 sm:px-6 py-4 sm:py-6 relative z-10 fade-in">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <svg class="h-7 w-7 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
+                    <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"></path>
+                </svg>
+                <span class="ml-3 text-lg sm:text-xl tracking-tight font-geist-mono">Leela Analytics</span>
+            </div>
+            <div class="hidden md:flex space-x-6 lg:space-x-10 text-sm text-gray-300">
+                <a href="#services" class="hover:text-white transition-colors">Services</a>
+                <a href="#llm-tech" class="hover:text-white transition-colors">LLM Tech</a>
+                <a href="blog.html" class="hover:text-white transition-colors">Insights</a>
+                <a href="#about" class="hover:text-white transition-colors">About</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="md:hidden text-gray-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <a href="#contact" class="hidden md:block text-sm border border-gray-700 rounded-md px-4 py-2 hover:bg-white/5 transition-all">
+                    Contact Us
                 </a>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="index.html#home" class="active">Home</a></li>
-                    <li><a href="index.html#services">Services</a></li>
-                    <li><a href="blog.html">Insights & Articles</a></li>
-                    <li><a href="index.html#llm-tech">LLM Tech</a></li>
-                </ul>
-            </nav>
-            <div class="mobile-menu-btn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
         </div>
-    </header>
+    </nav>
 
-    <section id="home" class="hero">
-        <div class="hero-overlay"></div>
-        <div id="canvas-container"></div>
-        <div class="container">
-            <div class="hero-content">
-                <h1>The Experts in Customizing LLMs for Vertical AI Solutions</h1>
-                <p>Unlocking the full potential of large language models for businesses and researchers</p>
-                <div class="cta-buttons">
-                    <a href="#services" class="btn primary">Our Services</a>
-                    <a href="https://www.linkedin.com/company/leela-analytics" target="_blank" class="btn secondary">Get in Touch</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent"></div>
 
-    <section id="services" class="services">
-        <div class="container">
-            <div class="section-header">
-                <h2>Our Services</h2>
-                <p>Tailored AI solutions for your specific industry needs</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="icon">
-                        <i class="fas fa-cube"></i>
-                    </div>
-                    <h3>Vertical AI Customization</h3>
-                    <p>We tailor LLMs for domain-specific applications, ensuring unmatched relevance and performance.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">
-                        <i class="fas fa-compress-alt"></i>
-                    </div>
-                    <h3>Quantization Expertise</h3>
-                    <p>Reducing model size while retaining performance for efficient deployment.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Security & Monitoring</h3>
-                    <p>Building robust infrastructure for secure AI operations and real-time monitoring.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3>Search at Scale</h3>
-                    <p>Designing custom, scalable search applications powered by cutting-edge AI.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <h3>Cloud Hyperscaler Integration</h3>
-                    <p>Seamlessly deploying models across leading cloud platforms.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>AI Adoption Services</h3>
-                    <p>Helping organizations onboard AI effectively, with a focus on education and usability.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="about">
-        <div class="container">
-            <div class="section-header">
-                <h2>About Leela Analytics</h2>
-                <p>Pioneering the future of AI customization with cybersecurity expertise</p>
-            </div>
-            <div class="about-content">
-                <div class="about-text-wrapper">
-                    <div class="about-text">
-                        <p>At Leela Analytics, we are pioneers in the specialized field of vertical LLM customization with a strong focus on cybersecurity applications. Our team combines deep technical knowledge in large language models with extensive cybersecurity expertise to deliver AI solutions that are not only powerful but also secure and compliant.</p>
-                        <p>Founded by industry veterans with backgrounds in cloud security, infrastructure management, and AI development, we've established ourselves as leaders in tailoring LLMs for domain-specific applications. Our approach integrates cutting-edge AI capabilities with robust security frameworks, ensuring that organizations can leverage the full potential of language models while maintaining the highest standards of data protection.</p>
-                        <p>Whether you're in healthcare, finance, legal, or other regulated industries, our solutions help you harness the power of AI in ways that are relevant, efficient, and secure. We believe that the true value of large language models lies in their ability to be customized for specific use cases while adhering to strict security protocols.</p>
-                    </div>
-                </div>
-                <div class="about-stats-cards">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-building"></i>
-                        </div>
-                        <h3>10+</h3>
-                        <p>Vertical Industries Served</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-brain"></i>
-                        </div>
-                        <h3>5+</h3>
-                        <p>LLM Architectures Mastered</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-cloud"></i>
-                        </div>
-                        <h3>3</h3>
-                        <p>Cloud Platforms Integrated</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="blog" class="blog">
-        <div class="container">
-            <div class="section-header">
-                <h2>Insights & Articles</h2>
-                <p>Expert perspectives on AI, LLMs, and the future of technology</p>
+    <!-- Hero content -->
+    <div id="home" class="container mx-auto px-4 sm:px-6 py-12 md:py-24 lg:py-32 relative z-10">
+        <div class="max-w-3xl">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-[76px] font-geist-mono font-black tracking-tight leading-none mb-4 sm:mb-6 fade-in">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">VERTICAL</span><br/>
+                <span class="text-white">AI SOLUTIONS</span>
+            </h1>
+            <p class="text-gray-300 text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 max-w-lg font-light tracking-wide fade-in-slide-up delay-100">
+                We specialize in tailoring large language models for domain-specific applications with a focus on security and compliance.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-16 fade-in-slide-up delay-200">
+                <a href="#services" class="bg-blue-500 text-white font-light rounded-md px-5 py-2.5 sm:px-6 sm:py-3 hover:bg-blue-400 transition-all text-center">
+                    Explore Solutions
+                </a>
+                <a href="https://www.linkedin.com/company/leela-analytics" target="_blank" class="bg-transparent border border-gray-700 rounded-md px-5 py-2.5 sm:px-6 sm:py-3 hover:bg-white/5 transition-all text-center">
+                    Get in Touch
+                </a>
             </div>
             
-            <div class="horizontal-scroll-section">
-                <div class="scroll-container">
-                    <div class="scroll-controls">
-                        <button class="scroll-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
-                        <button class="scroll-btn next-btn"><i class="fas fa-chevron-right"></i></button>
-                        <button class="scroll-btn pause-btn"><i class="fas fa-pause"></i></button>
+            <!-- Feature cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-16 sm:mt-20 fade-in-slide-up delay-300">
+                <div class="backdrop-blur-lg bg-black/30 p-4 sm:p-6 rounded-xl border border-gray-800">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-4">
+                        <i class="fas fa-cogs text-blue-400"></i>
                     </div>
-                    <div class="scroll-content">
-                        <div class="article-card">
-                            <div class="article-image" style="background-color: #e0e7ff;">
-                                <i class="fas fa-robot"></i>
-                            </div>
-                            <div class="article-content">
-                                <h3>The Ethical Abyss: Perfect LLM Dark Hallucination & The Last Human</h3>
-                                <p class="article-excerpt">An exploration of the ethical implications of increasingly perfect language models and their potential impact on humanity.</p>
-                                <a href="https://www.linkedin.com/pulse/ethical-abyss-perfect-llm-dark-hallucination-last-human-jzsoc/" target="_blank" class="article-link">Read on LinkedIn <i class="fas fa-external-link-alt"></i></a>
-                            </div>
-                        </div>
-                        
-                        <div class="article-card">
-                            <div class="article-image" style="background-color: #dbeafe;">
-                                <i class="fas fa-brain"></i>
-                            </div>
-                            <div class="article-content">
-                                <h3>Claude 3.7: The AI That's Changing How We Build, Create & Work</h3>
-                                <p class="article-excerpt">A deep dive into Claude 3.7's capabilities and how it's transforming workflows across industries.</p>
-                                <a href="https://www.linkedin.com/pulse/claude-37-ai-thats-changing-how-we-build-create-work-zkcee" target="_blank" class="article-link">Read on LinkedIn <i class="fas fa-external-link-alt"></i></a>
-                            </div>
-                        </div>
-                        
-                        <div class="article-card">
-                            <div class="article-image" style="background-color: #dcfce7;">
-                                <i class="fas fa-cogs"></i>
-                            </div>
-                            <div class="article-content">
-                                <h3>Agentic Reasoning: A Simplified Guide</h3>
-                                <p class="article-excerpt">Breaking down the complex concept of agentic reasoning in AI systems and its practical applications.</p>
-                                <a href="https://www.linkedin.com/pulse/agentic-reasoning-simplified-guide-leela-analytics-9qeuc" target="_blank" class="article-link">Read on LinkedIn <i class="fas fa-external-link-alt"></i></a>
-                            </div>
-                        </div>
-                        
-                        <div class="article-card">
-                            <div class="article-image" style="background-color: #fee2e2;">
-                                <i class="fas fa-code"></i>
-                            </div>
-                            <div class="article-content">
-                                <h3>AI-Powered IDEs: Mirage of Seamless Development or Just Another Tool?</h3>
-                                <p class="article-excerpt">Examining the reality behind AI-powered development environments and their place in the modern developer's toolkit.</p>
-                                <a href="https://www.linkedin.com/pulse/ai-powered-ides-mirage-seamless-development-just-another-p134c" target="_blank" class="article-link">Read on LinkedIn <i class="fas fa-external-link-alt"></i></a>
-                            </div>
-                        </div>
-                        
-                        <div class="article-card">
-                            <div class="article-image" style="background-color: #fef3c7;">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <div class="article-content">
-                                <h3>Cybersecurity in the Age of AI: New Threats, New Solutions</h3>
-                                <p class="article-excerpt">How AI is reshaping both the threat landscape and defensive capabilities in cybersecurity.</p>
-                                <a href="https://www.linkedin.com/pulse/cybersecurity-age-ai-new-threats-solutions-leela-analytics-asdfe" target="_blank" class="article-link">Read on LinkedIn <i class="fas fa-external-link-alt"></i></a>
-                            </div>
-                        </div>
-                        
-                        <div class="article-card">
-                            <div class="article-image" style="background-color: #f3e8ff;">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <div class="article-content">
-                                <h3>The Business Case for Vertical AI: ROI Beyond the Hype</h3>
-                                <p class="article-excerpt">A practical examination of the real business value of implementing vertical AI solutions.</p>
-                                <a href="https://www.linkedin.com/pulse/business-case-vertical-ai-roi-beyond-hype-leela-analytics-fj3sc" target="_blank" class="article-link">Read on LinkedIn <i class="fas fa-external-link-alt"></i></a>
-                            </div>
-                        </div>
-                        
-                        <div class="article-card">
-                            <div class="article-image" style="background-color: #e0f2fe;">
-                                <i class="fas fa-microchip"></i>
-                            </div>
-                            <div class="article-content">
-                                <h3>Quantization Techniques for LLMs: A Practical Guide</h3>
-                                <p class="article-excerpt">Understanding the technical approaches to model compression and their real-world applications.</p>
-                                <a href="https://www.linkedin.com/pulse/quantization-techniques-llms-practical-guide-leela-analytics-ej2fc" target="_blank" class="article-link">Read on LinkedIn <i class="fas fa-external-link-alt"></i></a>
-                            </div>
-                        </div>
-                        
-                        <div class="article-card">
-                            <div class="article-image" style="background-color: #fae8ff;">
-                                <i class="fas fa-globe"></i>
-                            </div>
-                            <div class="article-content">
-                                <h3>Global AI Regulation: Navigating the Emerging Landscape</h3>
-                                <p class="article-excerpt">A comprehensive overview of international AI regulatory frameworks and compliance strategies.</p>
-                                <a href="https://www.linkedin.com/pulse/global-ai-regulation-navigating-emerging-landscape-leela-analytics-dj3fc" target="_blank" class="article-link">Read on LinkedIn <i class="fas fa-external-link-alt"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="scroll-progress-container">
-                        <div class="scroll-progress"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="llm-tech" class="llm-tech">
-        <div class="container">
-            <div class="section-header">
-                <h2>LLM Technology Stack</h2>
-                <p>Explore our cutting-edge language model technologies</p>
-            </div>
-            
-            <div class="llm-scroll-wrapper">
-                <div class="llm-cards-container">
-                    <!-- GPT-4 Card -->
-                    <div class="llm-card gpt">
-                        <div class="llm-card-content">
-                            <div class="llm-animation-container">
-                                <div class="gpt-animation">
-                                    <div class="brain-pulse"></div>
-                                    <i class="fas fa-brain"></i>
-                                    <div class="neural-connection"></div>
-                                    <div class="neural-connection"></div>
-                                    <div class="neural-connection"></div>
-                                </div>
-                            </div>
-                            <h3>GPT-4</h3>
-                            <div class="llm-stats">
-                                <div class="llm-stat">
-                                    <span class="stat-value">175B</span>
-                                    <span class="stat-label">Parameters</span>
-                                </div>
-                                <div class="llm-stat">
-                                    <span class="stat-value">High</span>
-                                    <span class="stat-label">Reasoning</span>
-                                </div>
-                            </div>
-                            <p class="llm-description">OpenAI's most advanced LLM with enhanced reasoning capabilities</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Claude 3 Card -->
-                    <div class="llm-card claude">
-                        <div class="llm-card-content">
-                            <div class="llm-animation-container">
-                                <div class="claude-animation">
-                                    <i class="fas fa-robot"></i>
-                                    <div class="instruction-line"></div>
-                                    <div class="instruction-line"></div>
-                                    <div class="instruction-line"></div>
-                                    <div class="instruction-dot"></div>
-                                </div>
-                            </div>
-                            <h3>Claude 3</h3>
-                            <div class="llm-stats">
-                                <div class="llm-stat">
-                                    <span class="stat-value">200B+</span>
-                                    <span class="stat-label">Parameters</span>
-                                </div>
-                                <div class="llm-stat">
-                                    <span class="stat-value">Superior</span>
-                                    <span class="stat-label">Instructions</span>
-                                </div>
-                            </div>
-                            <p class="llm-description">Anthropic's latest model with superior instruction following</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Llama 3 Card -->
-                    <div class="llm-card llama">
-                        <div class="llm-card-content">
-                            <div class="llm-animation-container">
-                                <div class="llama-animation">
-                                    <i class="fas fa-code-branch"></i>
-                                    <div class="branch-line"></div>
-                                    <div class="branch-line"></div>
-                                    <div class="code-block"></div>
-                                    <div class="code-block"></div>
-                                </div>
-                            </div>
-                            <h3>Llama 3</h3>
-                            <div class="llm-stats">
-                                <div class="llm-stat">
-                                    <span class="stat-value">70B</span>
-                                    <span class="stat-label">Parameters</span>
-                                </div>
-                                <div class="llm-stat">
-                                    <span class="stat-value">Open</span>
-                                    <span class="stat-label">Source</span>
-                                </div>
-                            </div>
-                            <p class="llm-description">Meta's open-source LLM optimized for enterprise applications</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Gemini Pro Card -->
-                    <div class="llm-card gemini">
-                        <div class="llm-card-content">
-                            <div class="llm-animation-container">
-                                <div class="gemini-animation">
-                                    <i class="fas fa-gem"></i>
-                                    <div class="gem-sparkle"></div>
-                                    <div class="gem-sparkle"></div>
-                                    <div class="gem-sparkle"></div>
-                                    <div class="multimodal-icon"></div>
-                                </div>
-                            </div>
-                            <h3>Gemini Pro</h3>
-                            <div class="llm-stats">
-                                <div class="llm-stat">
-                                    <span class="stat-value">Multi</span>
-                                    <span class="stat-label">Modal</span>
-                                </div>
-                                <div class="llm-stat">
-                                    <span class="stat-value">Advanced</span>
-                                    <span class="stat-label">Reasoning</span>
-                                </div>
-                            </div>
-                            <p class="llm-description">Google's multimodal model with advanced reasoning</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Mistral Large Card -->
-                    <div class="llm-card mistral">
-                        <div class="llm-card-content">
-                            <div class="llm-animation-container">
-                                <div class="mistral-animation">
-                                    <i class="fas fa-wind"></i>
-                                    <div class="wind-line"></div>
-                                    <div class="wind-line"></div>
-                                    <div class="wind-line"></div>
-                                </div>
-                            </div>
-                            <h3>Mistral Large</h3>
-                            <div class="llm-stats">
-                                <div class="llm-stat">
-                                    <span class="stat-value">32B</span>
-                                    <span class="stat-label">Parameters</span>
-                                </div>
-                                <div class="llm-stat">
-                                    <span class="stat-value">Efficient</span>
-                                    <span class="stat-label">Performance</span>
-                                </div>
-                            </div>
-                            <p class="llm-description">Efficient and powerful model with state-of-the-art performance</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Falcon Card -->
-                    <div class="llm-card falcon">
-                        <div class="llm-card-content">
-                            <div class="llm-animation-container">
-                                <div class="falcon-animation">
-                                    <i class="fas fa-feather-alt"></i>
-                                    <div class="feather-particle"></div>
-                                    <div class="feather-particle"></div>
-                                    <div class="feather-particle"></div>
-                                </div>
-                            </div>
-                            <h3>Falcon 180B</h3>
-                            <div class="llm-stats">
-                                <div class="llm-stat">
-                                    <span class="stat-value">180B</span>
-                                    <span class="stat-label">Parameters</span>
-                                </div>
-                                <div class="llm-stat">
-                                    <span class="stat-value">Few-shot</span>
-                                    <span class="stat-label">Learning</span>
-                                </div>
-                            </div>
-                            <p class="llm-description">TII's massive model with exceptional few-shot capabilities</p>
-                        </div>
-                    </div>
+                    <h3 class="text-lg font-geist-mono font-semibold mb-2">Vertical AI Customization</h3>
+                    <p class="text-gray-400 text-sm">Domain-specific LLM solutions tailored for your industry, ensuring unmatched relevance and performance for specialized use cases.</p>
                 </div>
                 
-                <div class="llm-scroll-controls">
-                    <button class="llm-scroll-left"><i class="fas fa-chevron-left"></i></button>
-                    <div class="llm-scroll-progress">
-                        <div class="llm-scroll-progress-bar"></div>
+                <div class="backdrop-blur-lg bg-black/30 p-4 sm:p-6 rounded-xl border border-gray-800 fade-in-slide-up delay-400">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-4">
+                        <i class="fas fa-microchip text-blue-400"></i>
                     </div>
-                    <button class="llm-scroll-right"><i class="fas fa-chevron-right"></i></button>
+                    <h3 class="text-lg font-geist-mono font-semibold mb-2">Quantization Expertise</h3>
+                    <p class="text-gray-400 text-sm">Optimize model performance while reducing computational requirements through advanced quantization techniques.</p>
+                </div>
+                
+                <div class="backdrop-blur-lg bg-black/30 p-4 sm:p-6 rounded-xl border border-gray-800 fade-in-slide-up delay-500">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-blue-400"></i>
+                    </div>
+                    <h3 class="text-lg font-geist-mono font-semibold mb-2">Enterprise Security</h3>
+                    <p class="text-gray-400 text-sm">Enterprise-grade security infrastructure with comprehensive monitoring capabilities for secure, compliant AI operations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent my-16 sm:my-24"></div>
+    
+    <section id="services" class="container mx-auto px-4 sm:px-6 py-12 relative z-10">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-geist-mono font-bold mb-4">Our Services</h2>
+            <p class="text-gray-300 text-lg">Tailored AI solutions for your specific industry needs</p>
+        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                        <i class="fas fa-cube text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-geist-mono font-semibold mb-3">Vertical AI Customization</h3>
+                    <p class="text-gray-300 text-base">We tailor LLMs for domain-specific applications, ensuring unmatched relevance and performance.</p>
+                </div>
+                <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                        <i class="fas fa-microchip text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-geist-mono font-semibold mb-3">Quantization Expertise</h3>
+                    <p class="text-gray-300 text-base">Optimizing model performance while reducing computational requirements through advanced techniques.</p>
+                </div>
+                <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                        <i class="fas fa-shield-alt text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-geist-mono font-semibold mb-3">Enterprise Security</h3>
+                    <p class="text-gray-300 text-base">Comprehensive security infrastructure with robust monitoring for secure, compliant AI operations.</p>
+                </div>
+                <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                        <i class="fas fa-search text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-geist-mono font-semibold mb-3">Search at Scale</h3>
+                    <p class="text-gray-300 text-base">Designing custom, scalable search applications powered by cutting-edge AI.</p>
+                </div>
+                <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                        <i class="fas fa-cloud text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-geist-mono font-semibold mb-3">Cloud Integration</h3>
+                    <p class="text-gray-300 text-base">Seamless integration with major cloud providers for optimal performance and scalability.</p>
+                </div>
+                <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                        <i class="fas fa-users text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-geist-mono font-semibold mb-3">AI Adoption Services</h3>
+                    <p class="text-gray-300 text-base">Helping organizations onboard AI effectively, with a focus on education and usability.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h2>Leela Analytics</h2>
-                    <p>Customizing LLMs for Vertical AI Solutions</p>
+    <div class="h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent my-16 sm:my-24"></div>
+
+    <section id="about" class="container mx-auto px-4 sm:px-6 py-12 relative z-10">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-geist-mono font-bold mb-4">About Leela Analytics</h2>
+            <p class="text-gray-300 text-lg">Pioneering the future of AI customization with cybersecurity expertise</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            <div class="lg:col-span-2 backdrop-blur-lg bg-black/30 p-6 sm:p-8 rounded-xl border border-gray-800">
+                <p class="text-gray-200 mb-4">At Leela Analytics, we are pioneers in the specialized field of vertical LLM customization with a strong focus on cybersecurity applications. Our team combines deep technical knowledge in large language models with extensive cybersecurity expertise to deliver AI solutions that are not only powerful but also secure and compliant.</p>
+                <p class="text-gray-200">Founded by industry veterans with backgrounds in cloud security, infrastructure management, and AI development, we've established ourselves as leaders in tailoring LLMs for domain-specific applications. Our approach integrates cutting-edge AI capabilities with robust security frameworks, ensuring that organizations can leverage the full potential of language models while maintaining the highest standards of data protection.</p>
+            </div>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="backdrop-blur-lg bg-black/30 p-5 rounded-xl border border-gray-800 text-center">
+                    <div class="text-3xl sm:text-4xl font-geist-mono text-blue-400 font-bold mb-2">15+</div>
+                    <div class="text-gray-300">Years Combined Experience</div>
                 </div>
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h3>Company</h3>
-                        <ul>
-                            <li><a href="index.html#home">Home</a></li>
-                            <li><a href="index.html#services">Services</a></li>
-                            <li><a href="blog.html">Insights & Articles</a></li>
-                            <li><a href="index.html#llm-tech">LLM Tech</a></li>
-                        </ul>
-                    </div>
-                    <div class="link-group">
-                        <h3>Legal</h3>
-                        <ul>
-                            <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                            <li><a href="terms-of-service.html">Terms of Service</a></li>
-                            <li><a href="cookie-policy.html">Cookie Policy</a></li>
-                        </ul>
-                    </div>
-                    <div class="link-group">
-                        <h3>Connect</h3>
-                        <ul>
-                            <li><a href="https://www.linkedin.com/company/leela-analytics" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
-                        </ul>
-                    </div>
+                <div class="backdrop-blur-lg bg-black/30 p-5 rounded-xl border border-gray-800 text-center">
+                    <div class="text-3xl sm:text-4xl font-geist-mono text-blue-400 font-bold mb-2">25+</div>
+                    <div class="text-gray-300">Enterprise Clients</div>
+                </div>
+                <div class="backdrop-blur-lg bg-black/30 p-5 rounded-xl border border-gray-800 text-center">
+                    <div class="text-3xl sm:text-4xl font-geist-mono text-blue-400 font-bold mb-2">5</div>
+                    <div class="text-gray-300">LLM Architectures Mastered</div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Leela Analytics Inc. All rights reserved.</p>
+        </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent my-16 sm:my-24"></div>
+
+    <section id="blog" class="container mx-auto px-4 sm:px-6 py-12 relative z-10">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-geist-mono font-bold mb-4">Insights & Articles</h2>
+            <p class="text-gray-300 text-lg">Expert perspectives on AI, LLMs, and the future of technology</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-10">
+            <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] flex flex-col">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5">
+                    <i class="fas fa-code text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">AI-Powered IDEs: Mirage of Seamless Development or Just Another Tool?</h3>
+                <p class="text-gray-300 text-base mb-5 flex-grow">Examining the reality behind AI-powered development environments and their place in the modern developer's toolkit.</p>
+                <a href="https://www.linkedin.com/pulse/ai-powered-ides-mirage-seamless-development-just-another-p134c" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center">Read on LinkedIn <i class="fas fa-external-link-alt ml-2"></i></a>
             </div>
+            
+            <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] flex flex-col">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5">
+                    <i class="fas fa-shield-alt text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">Cybersecurity in the Age of AI: New Threats, New Solutions</h3>
+                <p class="text-gray-300 text-base mb-5 flex-grow">How AI is reshaping both the threat landscape and defensive capabilities in cybersecurity.</p>
+                <a href="https://www.linkedin.com/pulse/cybersecurity-age-ai-new-threats-solutions-leela-analytics-asdfe" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center">Read on LinkedIn <i class="fas fa-external-link-alt ml-2"></i></a>
+            </div>
+            
+            <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] flex flex-col">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5">
+                    <i class="fas fa-chart-line text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">The Business Case for Vertical AI: ROI Beyond the Hype</h3>
+                <p class="text-gray-300 text-base mb-5 flex-grow">A practical examination of the real business value of implementing vertical AI solutions.</p>
+                <a href="https://www.linkedin.com/pulse/business-case-vertical-ai-roi-beyond-hype-leela-analytics-fj3sc" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center">Read on LinkedIn <i class="fas fa-external-link-alt ml-2"></i></a>
+            </div>
+            
+            <div class="backdrop-blur-lg bg-black/30 p-5 sm:p-7 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] flex flex-col">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5">
+                    <i class="fas fa-microchip text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">Quantization Techniques for LLMs: A Practical Guide</h3>
+                <p class="text-gray-300 text-base mb-5 flex-grow">Understanding the technical approaches to model compression and their real-world applications.</p>
+                <a href="https://www.linkedin.com/pulse/quantization-techniques-llms-practical-guide-leela-analytics-ej2fc" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center">Read on LinkedIn <i class="fas fa-external-link-alt ml-2"></i></a>
+            </div>
+        </div>
+        <div class="text-center">
+            <a href="blog.html" class="inline-block bg-transparent border border-gray-700 rounded-md px-6 py-3 hover:bg-white/5 transition-all text-center">View All Articles</a>
+        </div>
+    </section>
+
+    <section id="llm-tech" class="container mx-auto px-4 sm:px-6 py-12 relative z-10">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-geist-mono font-bold mb-4">LLM Technology Stack</h2>
+            <p class="text-gray-300 text-lg">We work with the most advanced language models to deliver cutting-edge solutions</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8">
+            <!-- GPT-4o Card -->
+            <div class="backdrop-blur-lg bg-black/30 p-6 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                    <i class="fas fa-robot text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">GPT-4o</h3>
+                <div class="flex justify-between mb-4">
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">~1.8T</div>
+                        <div class="text-xs text-gray-400">Parameters</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">Multimodal</div>
+                        <div class="text-xs text-gray-400">Capabilities</div>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm">OpenAI's most advanced multimodal LLM with real-time processing</p>
+            </div>
+            
+            <!-- Claude 3.5 Card -->
+            <div class="backdrop-blur-lg bg-black/30 p-6 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                    <i class="fas fa-comment-dots text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">Claude 3.5 Sonnet</h3>
+                <div class="flex justify-between mb-4">
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">~1.5T</div>
+                        <div class="text-xs text-gray-400">Parameters</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">Multimodal</div>
+                        <div class="text-xs text-gray-400">Capabilities</div>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm">Anthropic's latest model with exceptional reasoning and code capabilities</p>
+            </div>
+            
+            <!-- Llama 3 Card -->
+            <div class="backdrop-blur-lg bg-black/30 p-6 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                    <i class="fas fa-code-branch text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">Llama 3 405B</h3>
+                <div class="flex justify-between mb-4">
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">405B</div>
+                        <div class="text-xs text-gray-400">Parameters</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">Open Source</div>
+                        <div class="text-xs text-gray-400">License</div>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm">Meta's largest open-source LLM with exceptional reasoning capabilities</p>
+            </div>
+            
+            <!-- Gemini 1.5 Card -->
+            <div class="backdrop-blur-lg bg-black/30 p-6 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                    <i class="fas fa-gem text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">Gemini 1.5 Pro</h3>
+                <div class="flex justify-between mb-4">
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">~2T</div>
+                        <div class="text-xs text-gray-400">Parameters</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">1M+ Context</div>
+                        <div class="text-xs text-gray-400">Window</div>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm">Google's most capable multimodal AI with massive context handling</p>
+            </div>
+            
+            <!-- Mistral Large 2 Card -->
+            <div class="backdrop-blur-lg bg-black/30 p-6 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                    <i class="fas fa-wind text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">Mistral Large 2</h3>
+                <div class="flex justify-between mb-4">
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">123B</div>
+                        <div class="text-xs text-gray-400">Parameters</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">32K Context</div>
+                        <div class="text-xs text-gray-400">Window</div>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm">Mistral AI's flagship model with exceptional reasoning and tool use</p>
+            </div>
+            
+            <!-- Mixtral Card -->
+            <div class="backdrop-blur-lg bg-black/30 p-6 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-5 group-hover:bg-blue-500/30 transition-all">
+                    <i class="fas fa-network-wired text-blue-400 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-geist-mono font-semibold mb-3">Mixtral 8x22B</h3>
+                <div class="flex justify-between mb-4">
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">176B</div>
+                        <div class="text-xs text-gray-400">Parameters</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm text-blue-400 font-semibold">MoE</div>
+                        <div class="text-xs text-gray-400">Architecture</div>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm">Mistral AI's Mixture-of-Experts model with efficient parameter usage</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent my-16 sm:my-24"></div>
+
+    <footer class="container mx-auto px-4 sm:px-6 py-12 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div class="md:col-span-1">
+                <div class="flex items-center mb-4">
+                    <svg class="h-6 w-6 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
+                        <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"></path>
+                    </svg>
+                    <span class="ml-2 text-lg font-geist-mono">LEELA ANALYTICS</span>
+                </div>
+                <p class="text-gray-400 text-sm">Customizing LLMs for Vertical AI Solutions</p>
+            </div>
+            <div>
+                <h3 class="font-geist-mono text-sm uppercase tracking-wider text-gray-400 mb-4">Company</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#home" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+                    <li><a href="#services" class="text-gray-300 hover:text-white transition-colors">Services</a></li>
+                    <li><a href="blog.html" class="text-gray-300 hover:text-white transition-colors">Insights</a></li>
+                    <li><a href="#llm-tech" class="text-gray-300 hover:text-white transition-colors">LLM Tech</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-geist-mono text-sm uppercase tracking-wider text-gray-400 mb-4">Legal</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="privacy-policy.html" class="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="terms-of-service.html" class="text-gray-300 hover:text-white transition-colors">Terms of Service</a></li>
+                    <li><a href="cookie-policy.html" class="text-gray-300 hover:text-white transition-colors">Cookie Policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-geist-mono text-sm uppercase tracking-wider text-gray-400 mb-4">Connect</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="https://www.linkedin.com/company/leela-analytics" target="_blank" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fab fa-linkedin mr-2"></i> LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="h-px bg-gray-800 mb-8"></div>
+        <div class="text-center text-gray-400 text-sm">
+            <p>&copy; 2025 Leela Analytics Inc. All rights reserved.</p>
         </div>
     </footer>
 

@@ -1,6 +1,17 @@
 
 export const arrow = '<svg viewBox="0 0 32 16" aria-hidden="true"><path d="M1 8h28M22 1l7 7-7 7"/></svg>';
 const contactLink='<a class="text-link" href="/#contact">Tell us what you’re building '+arrow+'</a>';
+const contactForm = `  <form id="contact-form" action="/api/contact" method="post" aria-label="Project enquiry">
+    <div class="field-pair"><div class="field"><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required minlength="2" maxlength="100"><span class="field-error" id="name-error"></span></div><div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254"><span class="field-error" id="email-error"></span></div></div>
+    <div class="field"><label for="company">Company <span>(optional)</span></label><input id="company" name="company" autocomplete="organization" maxlength="160"><span class="field-error" id="company-error"></span></div>
+    <div class="field"><label for="message">What would you like to build?</label><textarea id="message" name="message" rows="4" required minlength="10" maxlength="5000" placeholder="A few lines about your idea or challenge…"></textarea><span class="field-error" id="message-error"></span></div>
+    <div class="honey" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="website" tabindex="-1" autocomplete="off" maxlength="200"></div>
+    <p class="form-note">We’ll use these details to respond to your enquiry. <a href="/privacy-policy.html">Privacy policy</a></p>
+    <button class="button" type="submit"><span>Send enquiry</span>${arrow}</button>
+    <p id="form-status" class="form-status" role="status" aria-live="polite" tabindex="-1"></p>
+    <noscript><p class="form-note">This form needs JavaScript to send securely. Please <a href="mailto:hello@leelaanalytics.com">email us directly</a>.</p></noscript>
+  </form>`;
+const contactEmail = `<div class="contact-email"><h3>A conversation starts<br>with a few lines.</h3><p>Tell us what you’re working on, where you need a hand and any timing you have in mind.</p><a class="button" href="mailto:hello@leelaanalytics.com?subject=Project%20enquiry">Email Leela ${arrow}</a><p class="form-note">Opens your email app. You can also copy the address and write to us from your inbox.</p></div>`;
 const home = `
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero-copy">
@@ -45,16 +56,7 @@ const home = `
 </section>
 <section class="section contact" id="contact">
   <div class="contact-copy"><h2>What are you<br>working on?</h2><p>A new product, a difficult workflow, a model that needs to work better. Tell us a little about it.</p><a class="email-link" href="mailto:hello@leelaanalytics.com">hello@leelaanalytics.com</a><p class="contact-aside">Prefer a conversation? Email us and we’ll find a time.</p></div>
-  <form id="contact-form" action="/api/contact" method="post" aria-label="Project enquiry">
-    <div class="field-pair"><div class="field"><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required minlength="2" maxlength="100"><span class="field-error" id="name-error"></span></div><div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254"><span class="field-error" id="email-error"></span></div></div>
-    <div class="field"><label for="company">Company <span>(optional)</span></label><input id="company" name="company" autocomplete="organization" maxlength="160"><span class="field-error" id="company-error"></span></div>
-    <div class="field"><label for="message">What would you like to build?</label><textarea id="message" name="message" rows="4" required minlength="10" maxlength="5000" placeholder="A few lines about your idea or challenge…"></textarea><span class="field-error" id="message-error"></span></div>
-    <div class="honey" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="website" tabindex="-1" autocomplete="off" maxlength="200"></div>
-    <p class="form-note">We’ll use these details to respond to your enquiry. <a href="/privacy-policy.html">Privacy policy</a></p>
-    <button class="button" type="submit"><span>Send enquiry</span>${arrow}</button>
-    <p id="form-status" class="form-status" role="status" aria-live="polite" tabindex="-1"></p>
-    <noscript><p class="form-note">This form needs JavaScript to send securely. Please <a href="mailto:hello@leelaanalytics.com">email us directly</a>.</p></noscript>
-  </form>
+${contactForm}
 </section>`;
 
 const about=`
@@ -85,7 +87,14 @@ for(const n of notes) pages[n.path]={title:n.title+' — Leela',description:n.de
 for(const [path,p] of Object.entries(legal)) pages[path]={title:p.title+' — Leela Analytics',description:p.description,body:`<article class="article legal section"><h1>${p.title}</h1><p class="updated">Updated 16 October 2026</p><div class="prose">${p.body}</div></article>`};
 
 const escape=s=>s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
-export function renderPage(page,path){
+export function renderPage(page,path,{contactMode='api',assetVersion=''}={}){
+ let body = page.body;
+ if (contactMode === 'email') {
+  body = body.replace(contactForm,contactEmail)
+   .replace('Contact-form messages are delivered through Resend, our email service provider. ', 'Enquiries are sent from your email service to our business inbox. ')
+   .replace('Please do not misuse the contact form, send malicious content,', 'Please do not send malicious content');
+ }
+ const assetQuery=assetVersion?'?v='+assetVersion:'';
  const canonical='https://www.leelaanalytics.com/'+(path==='index.html'?'':path.replace(/\.html$/, ''));
  const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -94,10 +103,10 @@ ${page.noindex?'<meta name="robots" content="noindex">':''}
 <link rel="canonical" href="${canonical}"><meta property="og:type" content="website"><meta property="og:title" content="${escape(page.title)}"><meta property="og:description" content="${escape(page.description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="https://www.leelaanalytics.com/assets/leela-logo.png"><meta name="theme-color" content="#202a24">
 <link rel="icon" type="image/png" href="/assets/leela-mark.png">
 <link rel="preload" href="/fonts/manrope.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="/styles.css"><script src="/main.js" defer></script></head>
+<link rel="stylesheet" href="/styles.css${assetQuery}"><script src="/main.js${assetQuery}" defer></script></head>
 <body><a class="skip" href="#main">Skip to content</a>
 <header class="masthead"><a class="brand" href="/" aria-label="Leela Analytics home"><img src="/assets/leela-logo.png" width="962" height="243" alt="LEELA — LLM alchemy labs"></a><nav aria-label="Main navigation"><a href="/#expertise">Expertise</a><a href="/about-us.html"${page.nav==='about'?' aria-current="page"':''}>About</a><a href="/blog.html"${page.nav==='insights'?' aria-current="page"':''}>Insights</a><a class="nav-contact" href="/#contact">Let’s talk ${arrow}</a></nav></header>
-<main id="main">${page.body}</main>
+<main id="main">${body}</main>
 <footer><div class="footer-top"><a class="footer-signature" href="/" aria-label="Leela Analytics home"><span class="compact-mark"><img src="/assets/leela-mark.png" width="73" height="65" alt=""></span><span><strong>Leela Analytics</strong><span>LLM alchemy labs</span></span></a><div class="footer-links"><a href="/#expertise">Expertise</a><a href="/about-us.html">About</a><a href="/blog.html">Insights</a><a href="https://www.linkedin.com/company/leela-analytics" rel="noopener noreferrer">LinkedIn</a></div></div><div class="footer-bottom"><p>© ${new Date().getUTCFullYear()} Leela Analytics</p><div><a href="/privacy-policy.html">Privacy</a><a href="/cookie-policy.html">Cookies</a><a href="/terms-of-service.html">Terms</a></div><a href="mailto:hello@leelaanalytics.com">hello@leelaanalytics.com</a></div></footer></body></html>`;
  return html.replace(/href="\/([a-z-]+)\.html"/g, 'href="/$1"');
 }

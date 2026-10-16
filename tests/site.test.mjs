@@ -196,3 +196,22 @@ test('contact controls have explicit labels and an accessible submission status'
   }
   assert.ok(contactForms > 0, 'The published site must provide an accessible contact form');
 });
+
+
+test('Pages build offers email without publishing an unavailable API form', async () => {
+  try {
+    execFileSync(process.execPath, [join(root, 'scripts/build.mjs'), '--target=pages'], {cwd: root, stdio: 'pipe'});
+    const home = await readFile(join(output, 'index.html'), 'utf8');
+    assert.doesNotMatch(home, /<form\b|\/api\/contact/, 'Static hosting must not offer a form with no server');
+    assert.match(home, /href="mailto:hello@leelaanalytics\.com(?:\?[^"]*)?"/, 'Visitors need a working email contact');
+    const privacy = await readFile(join(output, 'privacy-policy.html'), 'utf8');
+    assert.doesNotMatch(privacy, /messages are delivered through Resend/, 'Privacy text must describe the deployed contact channel');
+    assert.ok((await stat(join(output, '.nojekyll'))).isFile());
+    assert.deepEqual(new Set((await inventory(output)).filter(file => file.endsWith('.html'))), publicPages);
+    for (const file of ['assets/leela-logo.png', 'assets/leela-mark.png', 'assets/workshop-illustration.webp', 'fonts/manrope.ttf', 'styles.css']) {
+      assert.ok((await stat(join(output, file))).size > 0, `Missing public asset: ${file}`);
+    }
+  } finally {
+    execFileSync(process.execPath, [join(root, 'scripts/build.mjs')], {cwd: root, stdio: 'pipe'});
+  }
+});

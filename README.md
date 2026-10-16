@@ -1,6 +1,6 @@
 # Leela Analytics corporate website
 
-Approved logo-led redesign: a fast static website, self-hosted fonts and a server-only Resend enquiry endpoint.
+A fast static website with self-hosted fonts. The current launch target is the existing GitHub Pages site, using a direct email contact panel for `hello@leelaanalytics.com`. A Cloudflare Worker with a server-only Resend enquiry endpoint is prepared for a later launch and remains unconfigured.
 
 ## Local preview
 
@@ -11,28 +11,41 @@ npm ci
 npm run dev
 ```
 
-Open http://127.0.0.1:4175. The preview is local-only and deliberately has no email credentials. A submission returns an unavailable state and preserves the message; no live email is sent.
+Open http://127.0.0.1:4175. The default preview uses the Worker-form version, is local-only and has no email credentials. A submission returns an unavailable state and preserves the message; no live email is sent.
+
+## Build targets
+
+```sh
+npm run build:pages
+```
+
+Builds the GitHub Pages version into `dist/`. Its contact panel opens the visitor's email application to write to `hello@leelaanalytics.com`; there is no contact form or server-side email endpoint on Pages. Privacy wording reflects direct email contact rather than Resend form delivery.
 
 ```sh
 npm run check
+npm run build
 npx wrangler deploy --dry-run
 ```
 
-Tests use mocked provider transport and never send email.
+The default `build` retains the enquiry form for the prepared Worker deployment. `check` builds that version and runs the tests; provider transport is mocked and tests never send email. A Worker dry run does not publish. Each build replaces `dist/`, so run `build:pages` last before publishing to Pages.
+
+## Publication
+
+The intended production workflow is GitHub Actions on a push to `master` or a manual `workflow_dispatch` run. It builds the Pages version and uploads **only `dist/`** as the Pages artifact. The repository root, server code and tests are not website assets. Deployment results are recorded in the repository’s Actions runs and `github-pages` environment. Verify the live site after each release.
+
+Root-level legacy HTML remains as historical source and is not copied into the build. The Cloudflare-specific `_headers` file and Worker routing are not a mechanism for configuring GitHub Pages. Do not assume those Worker behaviors or headers apply to Pages.
+
+The site's own code contains no analytics, advertising scripts, cookies or local-storage tracking. Read [DEPLOYMENT.md](DEPLOYMENT.md) for the Pages publication steps and the separate later Worker setup.
 
 ## Structure
 
 - `src/site.mjs`: shared templates, homepage, about, insights and policies
-- `src/styles.css`: approved responsive design
-- `src/main.js`: accessible enquiry submission states
-- `src/assets` / `src/fonts`: supplied logos, approved illustration, licensed fonts
-- `scripts/build.mjs`: explicit static output
-- `server`: Cloudflare Worker and contact validation/delivery
+- `src/styles.css`: responsive design
+- `src/main.js`: accessible enquiry submission states for the Worker-form version
+- `src/assets` / `src/fonts`: supplied logos, illustration and licensed fonts
+- `scripts/build.mjs`: target-specific static output
+- `server`: prepared Cloudflare Worker and contact validation/delivery
 - `tests`: API boundaries and publication integrity
-
-**Publish only `dist/` through the Worker configuration.** Root-level legacy HTML remains as historical source; it is not the rebuilt website and is not copied into the build. Public URLs are extensionless. Cloudflare redirects old `.html` URLs; the local preview mirrors this behavior.
-
-The site's own code contains no analytics, advertising scripts, cookies or local-storage tracking. Email credentials stay server-side. Read [DEPLOYMENT.md](DEPLOYMENT.md) for configuration and launch instructions. The website has not been deployed and DNS is unchanged.
 
 ## Identity
 

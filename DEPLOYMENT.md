@@ -1,8 +1,37 @@
 # Leela Analytics deployment
 
-The prepared target is Cloudflare Workers with static assets and one server-side Resend endpoint. Deployment, DNS changes and live email delivery have not been performed. The static asset directory is **`dist/` only**; never deploy the repository root, which includes server code, configuration, tests and internal material.
+The current intended production target is the existing GitHub Pages site. GitHub Actions will publish the Pages build from `dist/`, with a direct email contact panel for `hello@leelaanalytics.com`. The separate Cloudflare Worker and Resend form remain prepared but unconfigured. Deployment results are recorded in the repository’s Actions runs and `github-pages` environment. Verify the live site after each release.
 
-## Current blockers
+The static asset directory is **`dist/` only**. Never publish the repository root, which includes server code, configuration and tests.
+
+## GitHub Pages launch
+
+Use Node.js 22 or later and install the locked dependencies:
+
+```sh
+npm ci
+npm run check
+npm run build:pages
+```
+
+`build:pages` replaces `dist/` with the static Pages version. It replaces the contact form with a direct email panel and selects privacy wording for direct email contact. Visitors compose messages in their own email application; GitHub Pages does not run the Worker, call Resend or expose `/api/contact`.
+
+The ordinary `npm run build` retains the Worker form. Because both targets write to `dist/`, run `build:pages` after checks or any default build when preparing a Pages artifact.
+
+Publication steps:
+
+1. Use GitHub Actions as the Pages source in the repository's Pages settings, retaining the existing custom-domain configuration.
+2. Push the approved site to `master`, or run the Pages workflow manually with `workflow_dispatch` against `master`. Deployment is restricted to `master`.
+3. The workflow installs dependencies, builds with `npm run build:pages`, and uploads only `dist/` as the Pages artifact before deployment.
+4. Verify the workflow's deployment result and then review the live homepage, company page, insights, policies, assets and contact panel. Confirm the email link addresses `hello@leelaanalytics.com`; checking a link does not require sending an email.
+
+No Resend API key or Worker sender configuration is required for this launch. Keep those credentials out of Pages artifacts and frontend build variables. GitHub Pages does not interpret the Cloudflare `_headers` file or execute Worker redirects and API handling; this guide makes no claim that those settings apply to Pages.
+
+## Later launch: Cloudflare Worker and Resend form
+
+The remaining sections apply only to the prepared Worker target. They are not prerequisites for the email-only Pages launch. A future Worker deployment or DNS cutover should be configured and verified separately.
+
+### Configuration still required
 
 - Confirm the Cloudflare account and the final hostname/DNS cutover. `workers_dev` and preview URLs are disabled, and no custom-domain route is committed.
 - Configure a Resend-verified sender (`CONTACT_FROM`), which remains deliberately blank in `wrangler.jsonc`. The approved recipient is `CONTACT_TO=hello@leelaanalytics.com`. The form fails closed until the sender and API key are configured.
@@ -12,12 +41,12 @@ The prepared target is Cloudflare Workers with static assets and one server-side
 
 No paid database, Durable Object, queue, container, VM or other paid resource is required by this configuration. Workers Free and Resend Free can cover a modest enquiry site. Existing account-wide usage also counts against provider quotas. Cloudflare's rate limiter is an abuse reduction measure, not a precise global quota or a guaranteed daily email cap.
 
-## Build and review
+### Worker build and review
 
 Use Node.js 22 or later. The installed Wrangler release requires Node 22 even though the standalone API tests also run on Node 20. From the repository root:
 
 ```sh
-npm install
+npm ci
 npm run build
 node --test tests/contact.test.mjs
 ```
@@ -33,9 +62,9 @@ The example includes the approved recipient alias but leaves the API key and sen
 
 Tests use an injected `fetch` and fake bindings, so they do not contact Resend. Do not enter live credentials merely to test the interface. `.dev.vars` must be ignored by Git and omitted from `dist/`.
 
-## Approved deployment steps
+### Worker deployment steps
 
-These are instructions for the later launch, not a record of actions already performed.
+These are instructions for a later Worker launch, not a record of actions already performed.
 
 1. Authenticate Wrangler to the selected Cloudflare account. Check the selected account before changing secrets or routes.
 2. Keep `CONTACT_TO` set to the approved recipient, `hello@leelaanalytics.com`. Set `CONTACT_FROM` to the approved sender address, optionally formatted `Leela Analytics <enquiries@verified-domain>`. Verify the sending domain and its required DNS records in Resend. No alias or recipient-routing change is needed.
@@ -64,7 +93,9 @@ These are instructions for the later launch, not a record of actions already per
 
 8. With authorization for one live test, submit to the approved recipient and verify arrival and reply-to behavior. Verify rejected origins, the rate limit, validation errors and unknown `/api` routes. An API success indicates Resend accepted the send, not that the recipient mailbox delivered it.
 
-## Contact API contract
+### Worker contact API contract
+
+This endpoint is available only when the Worker is deployed and configured; it is not part of the GitHub Pages site.
 
 `POST /api/contact` expects `Content-Type: application/json` and an `Idempotency-Key` header containing a UUID. It requires an exact allowed `Origin`. `OPTIONS` supports an allowed-origin preflight for `POST`, `Content-Type` and `Idempotency-Key` only.
 
@@ -120,7 +151,7 @@ Generate one `crypto.randomUUID()` per distinct enquiry payload. Retain that UUI
 
 The handler aborts its Resend request after 10 seconds. It never returns raw provider errors or logs enquiry content, credentials or IP addresses. Rate limiting uses Cloudflare's trusted connecting IP; browser `Origin` and a honeypot are not authentication and cannot prevent all automated spam. Cloudflare and Resend still process technical/contact information under their own service policies.
 
-## Official references
+### Worker and email references
 
 - [Cloudflare Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/): Free request/CPU limits and paid upgrade pricing.
 - [Static asset billing](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/): free static requests and Worker invocation behavior.

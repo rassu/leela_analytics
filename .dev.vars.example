@@ -1,0 +1,8 @@
+# Local Wrangler development only. Copy to .dev.vars; never commit .dev.vars.
+# Leave the API key and sender empty for safe previews: the endpoint returns HTTP 503.
+RESEND_API_KEY=""
+CONTACT_FROM=""
+CONTACT_TO="hello@leelaanalytics.com"
+ALLOWED_ORIGINS="http://localhost:8787,http://127.0.0.1:8787"
+# CONTACT_FROM example after verification: Leela Analytics <enquiries@your-verified-domain>
+# CONTACT_TO is the approved enquiry recipient.

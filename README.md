@@ -42,13 +42,21 @@ The site's own code contains no analytics, advertising scripts, cookies or local
 - `src/site.mjs`: shared templates, homepage, about, insights and policies
 - `src/styles.css`: responsive design
 - `src/main.js`: accessible enquiry submission states for the Worker-form version
-- `src/assets` / `src/fonts`: supplied logos, illustration and licensed fonts
+- `src/assets` / `src/fonts`: company wordmarks, illustration and licensed fonts
 - `scripts/build.mjs`: target-specific static output
 - `server`: prepared Cloudflare Worker and contact validation/delivery
 - `tests`: API boundaries and publication integrity
 
 ## Identity
 
-Use the supplied full LEELA arrow mark on black and the compact circular mark in the light footer. The logos are original screenshot references; replace them with equivalent clean originals when available without redrawing the lettering. The illustration is generated conceptual artwork, not a photograph of an office or team.
+Use the full **Leela Analytics** name throughout the public identity, with both words equally prominent. Use the light horizontal SVG wordmark on the black masthead and the dark horizontal SVG wordmark in the light footer. The square icon stacks the full name; the dedicated social card also carries the full name. Keep the same identity on company social profiles.
+
+Page titles, image alternatives and accessible brand labels use “Leela Analytics”. Action labels use “About us” and “Email us”. Do not shorten the company name or treat “Analytics” as a small tagline. The illustration is generated conceptual artwork, not a photograph of an office or team.
 
 Manrope is used for headings; Public Sans for reading and controls. Font licenses are included in `src/fonts/`. Actual tokens and component guidance are recorded in DESIGN.md.
+
+### Brand asset exports
+
+The full-name arrow wordmarks are available as outlined SVGs and transparent PNGs in `src/assets/`, alongside the square profile icon, favicons, social card and LinkedIn company banner. Both words use the same Manrope weight and size. The website publishes the current assets from `dist/assets/`.
+
+To regenerate the committed artwork, install HarfBuzz (`hb-view`) locally, run `npm ci`, then `npm run brand:generate`. This optional authoring step uses the checked-in font and Sharp; ordinary site builds use the committed files and do not require HarfBuzz.

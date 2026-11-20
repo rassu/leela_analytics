@@ -9,9 +9,11 @@
     "test": "node --test tests/*.test.mjs",
     "check": "npm run build && npm test",
     "deploy": "npm run build && wrangler deploy",
-    "build:pages": "node scripts/build.mjs --target=pages"
+    "build:pages": "node scripts/build.mjs --target=pages",
+    "brand:generate": "node scripts/generate-brand-assets.mjs"
   },
   "devDependencies": {
+    "sharp": "^0.35.5",
     "wrangler": "^4.151.0"
   },
   "engines": {

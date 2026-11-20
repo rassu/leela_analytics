@@ -23,7 +23,7 @@ const pageRoutes = {
 };
 const publicPages = new Set(Object.keys(pageRoutes));
 const routeTargets = new Map(Object.entries(pageRoutes).map(([file, route]) => [route, file]));
-const rootAssets = new Set(['styles.css', 'main.js', '_headers', 'robots.txt', 'sitemap.xml']);
+const rootAssets = new Set(['styles.css', 'main.js', '_headers', 'favicon.ico', 'robots.txt', 'sitemap.xml']);
 let files;
 let htmlPages;
 
@@ -117,7 +117,7 @@ test('every public HTML page has its own canonical, title and descriptive metada
     assert.equal(canonical.length, 1, `${page}: expected one canonical`);
     assert.equal(canonical[0].href, `${origin}${pageRoutes[page]}`);
     const title = html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim();
-    assert.ok(title && title.length >= 12 && /leela/i.test(title), `${page}: missing useful branded title`);
+    assert.ok(title && title.length >= 12 && /leela analytics/i.test(title), `${page}: missing useful branded title`);
     assert.ok(!titles.has(title), `${page}: duplicate title`);
     titles.add(title);
     const description = elements(html, 'meta').find(meta => meta.name === 'description')?.content?.trim();
@@ -208,7 +208,7 @@ test('Pages build offers email without publishing an unavailable API form', asyn
     assert.doesNotMatch(privacy, /messages are delivered through Resend/, 'Privacy text must describe the deployed contact channel');
     assert.ok((await stat(join(output, '.nojekyll'))).isFile());
     assert.deepEqual(new Set((await inventory(output)).filter(file => file.endsWith('.html'))), publicPages);
-    for (const file of ['assets/leela-logo.png', 'assets/leela-mark.png', 'assets/workshop-illustration.webp', 'fonts/manrope.ttf', 'styles.css']) {
+    for (const file of ['assets/leela-analytics-wordmark-light.svg', 'assets/leela-analytics-wordmark-dark.svg', 'assets/leela-analytics-icon.svg', 'assets/leela-analytics-social.png', 'assets/workshop-illustration.webp', 'fonts/manrope.ttf', 'styles.css']) {
       assert.ok((await stat(join(output, file))).size > 0, `Missing public asset: ${file}`);
     }
   } finally {

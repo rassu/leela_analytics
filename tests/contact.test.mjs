@@ -11,7 +11,7 @@ const delivery = () => Response.json({ id: 'email-test-id' });
 const noSend = async () => { assert.fail('This request must not send an email'); };
 const env = (extra = {}) => ({
   ALLOWED_ORIGINS: ORIGIN,
-  CONTACT_FROM: 'Leela enquiries <enquiries@example.com>',
+  CONTACT_FROM: 'Leela Analytics enquiries <enquiries@example.com>',
   CONTACT_TO: 'team@example.com',
   RESEND_API_KEY: 'test-only-key',
   CONTACT_RATE_LIMITER: { limit: async () => ({ success: true }) },
@@ -48,7 +48,7 @@ test('sends plain text through Resend using only fixed server addresses', async 
   assert.equal(new Headers(sent.init.headers).get('Authorization'), 'Bearer test-only-key');
   assert.equal(new Headers(sent.init.headers).get('Idempotency-Key'), 'leela-contact/' + KEY);
   assert.deepEqual(JSON.parse(sent.init.body), {
-    from: 'Leela enquiries <enquiries@example.com>', to: ['team@example.com'],
+    from: 'Leela Analytics enquiries <enquiries@example.com>', to: ['team@example.com'],
     subject: 'New Leela Analytics enquiry', reply_to: 'asha@example.com',
     text: 'Name: Asha Rao\nEmail: asha@example.com\nCompany: Example Labs\n\nMessage:\nWe would like to discuss an AI product.',
   });

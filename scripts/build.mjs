@@ -11,7 +11,11 @@ for (const [path,page] of Object.entries(pages)) {
 }
 for (const file of ['styles.css','main.js',...(target==='worker'?['_headers']:[])]) await copyFile('src/'+file,'dist/'+file);
 await mkdir('dist/assets',{recursive:true});
-for (const file of ['leela-logo.png','leela-mark.png','workshop-illustration.webp']) await copyFile('src/assets/'+file,'dist/assets/'+file);
+for (const file of ['leela-analytics-wordmark-light.svg','leela-analytics-wordmark-dark.svg','leela-analytics-icon.svg','leela-analytics-favicon.png','leela-analytics-apple-touch-icon.png','leela-analytics-social.png','leela-analytics-wordmark-light.png','leela-analytics-wordmark-dark.png','leela-analytics-profile.png','leela-analytics-linkedin-banner.png','workshop-illustration.webp']) await copyFile('src/assets/'+file,'dist/assets/'+file);
+// Serve the revised identity to clients still using the previous asset URLs.
+await copyFile('src/assets/leela-analytics-wordmark-light.png','dist/assets/leela-logo.png');
+await copyFile('src/assets/leela-analytics-profile.png','dist/assets/leela-mark.png');
+await copyFile('src/assets/leela-analytics-favicon.ico','dist/favicon.ico');
 await cp('src/fonts','dist/fonts',{recursive:true});
 await writeFile('dist/robots.txt','User-agent: *\nAllow: /\nSitemap: https://www.leelaanalytics.com/sitemap.xml\n');
 await writeFile('dist/sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+Object.keys(pages).filter(p=>p!=='404.html').map(p=>'<url><loc>https://www.leelaanalytics.com/'+(p==='index.html'?'':p.replace(/\.html$/, ''))+'</loc></url>').join('')+'</urlset>\n');

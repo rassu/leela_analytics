@@ -118,12 +118,12 @@ components:
 
 **Creative North Star: "Open Workshop"**
 
-A capable, approachable engineering practice: clear spaces, natural illustration and readable, deliberate typography. The approved geometric LEELA identity supplies precision; the open-workshop illustration brings people, plants and an organic character to the experience.
+A capable, approachable engineering practice: clear spaces, natural illustration and readable, deliberate typography. The full Leela Analytics wordmark supplies precision, with both words equally prominent; the open-workshop illustration brings people, plants and an organic character to the experience.
 
-Use the full supplied mark on the black masthead and the compact supplied mark in the light footer. Preserve the assets' proportions and geometry. The pale mineral-blue hero and dark forest infrastructure section establish the main tonal contrast; editorial rows and generous space carry the detail.
+Use the light horizontal Leela Analytics SVG wordmark on the black masthead and its dark counterpart in the light footer. Preserve the full name in both. The square icon stacks the full name; use the dedicated full-name social card for sharing. The pale mineral-blue hero and dark forest infrastructure section establish the main tonal contrast; editorial rows and generous space carry the detail.
 
 **Key Characteristics:**
-- Natural illustration alongside an unchanged geometric identity.
+- Natural illustration alongside the full Leela Analytics identity.
 - Manrope headings and Public Sans reading text.
 - Flat tonal sections, fine rules and compact rectangular controls.
 - Clear reading order and visible interaction states.
@@ -170,9 +170,9 @@ Arrows move horizontally by `4px` on hover using a `.25s cubic-bezier(.16,1,.3,1
 
 ## Shapes
 
-Controls have the existing `control` radius. The overall composition is rectilinear, with thin rules and modest corners rather than pill-shaped containers. Arrow SVGs use the supplied path and a `1.5` stroke. The full wordmark's sharp geometry and the compact mark's circular silhouette are identity assets, not instructions to redraw either asset.
+Controls have the existing `control` radius. The overall composition is rectilinear, with thin rules and modest corners rather than pill-shaped containers. Arrow SVGs use the supplied path and a `1.5` stroke. The identity uses full-name horizontal SVG wordmarks and a square icon with the complete name stacked. Preserve their proportions; the word “Analytics” has equal visual prominence rather than a subordinate tagline treatment.
 
-**The Identity Rule.** Preserve the supplied marks; use organic illustration to complement their geometry without altering it.
+**The Identity Rule.** Use “Leela Analytics” in full, with both words equally prominent, across wordmarks, icons, social cards, page titles and accessible labels. Organic illustration complements the typography.
 
 ## Components
 
@@ -192,7 +192,7 @@ Use `name`, `email`, optional `company` and `message` as implemented, with the s
 
 ### Navigation
 
-Visible text links sit beside the full mark on the black masthead. Desktop links have a `44px` minimum height and `30px` gap; hover and the current page are underlined. At mobile widths the mark sits above a compact, evenly distributed link row. Keep the skip link and semantic navigation label. The compact footer mark belongs to a separate light signature treatment.
+Visible text links sit beside the full mark on the black masthead. Desktop links have a `44px` minimum height and `30px` gap; hover and the current page are underlined. At mobile widths the mark sits above a compact, evenly distributed link row. Keep the skip link and semantic navigation label. The light footer uses the dark full-name horizontal wordmark. Navigation and contact actions use “About us” and “Email us”.
 
 ### Infrastructure stack row
 
@@ -201,7 +201,7 @@ A flat, rule-separated row on the forest surface. Desktop columns are `1fr / 2fr
 ## Do's and Don'ts
 
 ### Do:
-- Do preserve the supplied full and compact marks, their proportions and their established placements.
+- Do use the full Leela Analytics wordmarks, stacked full-name icon and dedicated social card, preserving their proportions.
 - Do pair natural illustration with precise typography and a clear reading order.
 - Do reuse the measured source tokens and contextual breakpoints.
 - Do keep keyboard focus, visible labels, textual errors and reduced-motion behavior.
@@ -209,7 +209,7 @@ A flat, rule-separated row on the forest surface. Desktop columns are `1fr / 2fr
 
 ### Don't:
 - Don't add shadows, decorative gradients or floating-card treatments to this flat system.
-- Don't regenerate the logo, replace it with typed text or round off its geometry.
+- Don't shorten the company name, reuse standalone-name marks or reduce “Analytics” to a small tagline.
 - Don't introduce arbitrary token ramps, spacing scales or component variants.
 - Don't turn technology names into partner endorsements or add unverified client proof.
 - Don't add motion that is required to read, navigate or submit the form.
